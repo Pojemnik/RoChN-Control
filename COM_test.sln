@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoChN Control V2", "COM_test\RoChN Control V2.csproj", "{9EBBBD25-43C0-48A7-AA0D-CD30AB149BBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EBBBD25-43C0-48A7-AA0D-CD30AB149BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBBBD25-43C0-48A7-AA0D-CD30AB149BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBBBD25-43C0-48A7-AA0D-CD30AB149BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBBBD25-43C0-48A7-AA0D-CD30AB149BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F932E547-D0FB-42D6-BE06-FCD00611346D}
+	EndGlobalSection
+EndGlobal
