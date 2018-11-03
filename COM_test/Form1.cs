@@ -8,17 +8,6 @@ namespace COM_test
 {
     public partial class Form1 : Form
     {
-        delegate void SetTextCallback(string text);
-        delegate void SetLabelBattTextCallback(string text);
-        delegate void SetBattLevelImgCallback(string data);
-        delegate void SetKpValueCallback(Decimal value);
-        delegate void NumericUpDownKpSetIncrementCallback(Decimal value);
-        delegate void SetKdValueCallback(Decimal value);
-        delegate void NumericUpDownKdSetIncrementCallback(Decimal value);
-        delegate void SetKiValueCallback(Decimal value);
-        delegate void NumericUpDownKiSetIncrementCallback(Decimal value);
-        delegate void SetPWMValueCallback(int value);
-        //delegate void SetPanelSensorsVisibilityCallback(bool value);
         private bool Echo = false;
         private bool Benchmark = false;
         private bool BattFlat = false;
@@ -229,22 +218,22 @@ namespace COM_test
                         break;
                     case 'P':
                         SetText(Environment.NewLine + "Kp:");
-                        SetKpValue(Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
                         DataQueue.Dequeue();
                         break;
                     case 'I':
                         SetText(Environment.NewLine + "Ki:");
-                        SetKiValue(Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        SetNumericUpDownValue(NumericUpDownKi, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
                         DataQueue.Dequeue();
                         break;
                     case 'D':
                         SetText(Environment.NewLine + "Kd:");
-                        SetKdValue(Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        SetNumericUpDownValue(NumericUpDownKd, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
                         DataQueue.Dequeue();
                         break;
                     case 'W':
                         SetText(Environment.NewLine + "PWM:");
-                        SetPWMValue(Int32.Parse(Data));
+                        SetNumericUpDownValue(NumericUpDownPWM, Int32.Parse(Data));
                         DataQueue.Dequeue();
                         break;
                     case 'i':
@@ -270,12 +259,7 @@ namespace COM_test
 
         private void SetText(string text)
         {
-            if (this.TextBoxRecived.InvokeRequired)
-            {
-                SetTextCallback x = new SetTextCallback(SetText);
-                this.Invoke(x, new object[] { text });
-            }
-            else
+            MethodInvoker methodInvokerDelegate = delegate ()
             {
                 if (TextBoxRecived.Text == "Odebrane dane:")
                 {
@@ -283,59 +267,29 @@ namespace COM_test
                     text = text.Replace(Environment.NewLine, "");
                 }
                 this.TextBoxRecived.AppendText(text);
-            }
+            };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
+            else
+                methodInvokerDelegate();
         }
 
         private void SetLabelBattText(string text)
         {
-            if (this.LabelBatt.InvokeRequired)
-            {
-                SetLabelBattTextCallback x = new SetLabelBattTextCallback(SetLabelBattText);
-                this.Invoke(x, new object[] { text });
-            }
+            MethodInvoker methodInvokerDelegate = delegate () { LabelBatt.Text = "Bateria: " + text; };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
             else
-            {
-                LabelBatt.Text = "Bateria: " + text;
-            }
+                methodInvokerDelegate();
         }
 
-        private void SetKpValue(Decimal value)
+        private void SetNumericUpDownValue(NumericUpDown numeric, decimal value)
         {
-            if (this.NumericUpDownKp.InvokeRequired)
-            {
-                SetKpValueCallback x = new SetKpValueCallback(SetKpValue);
-                this.Invoke(x, new object[] { value });
-            }
+            MethodInvoker methodInvokerDelegate = delegate () { numeric.Value = value; };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
             else
-            {
-                NumericUpDownKp.Value = value;
-            }
-        }
-
-        private void SetKdValue(Decimal value)
-        {
-            if (this.NumericUpDownKd.InvokeRequired)
-            {
-                SetKdValueCallback x = new SetKdValueCallback(SetKdValue);
-                this.Invoke(x, new object[] { value });
-            }
-            else
-            {
-                NumericUpDownKd.Value = value;
-            }
-        }
-
-        private void SetKiValue(Decimal value)
-        {
-            if (this.NumericUpDownKi.InvokeRequired)
-            {
-                SetKiValueCallback x = new SetKiValueCallback(SetKiValue);
-                this.Invoke(x, new object[] { value });
-            }
-            else
-            {
-                NumericUpDownKi.Value = value;
-            }
+                methodInvokerDelegate();
         }
 
         private void SerialSend(byte data)
@@ -401,12 +355,8 @@ namespace COM_test
 
         private void SetBattLevelImg(string data)
         {
-            if (this.PictureBoxBatt.InvokeRequired)
-            {
-                SetBattLevelImgCallback x = new SetBattLevelImgCallback(SetBattLevelImg);
-                this.Invoke(x, new object[] { data });
-            }
-            else
+
+            MethodInvoker methodInvokerDelegate = delegate ()
             {
                 switch (data)
                 {
@@ -429,7 +379,11 @@ namespace COM_test
                         PictureBoxBatt.Image = Properties.Resources.batt_full;
                         break;
                 }
-            }
+            };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
+            else
+                methodInvokerDelegate();
         }
 
         private void CheckBoxEcho_CheckStateChanged(object sender, EventArgs e)
@@ -509,9 +463,9 @@ namespace COM_test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            NumericUpDownKpSetIncrement(0.1M);
-            NumericUpDownKdSetIncrement(0.1M);
-            NumericUpDownKiSetIncrement(0.1M);
+            SetNumericUpDownIncrement(NumericUpDownKp, 0.1M);
+            SetNumericUpDownIncrement(NumericUpDownKd, 0.1M);
+            SetNumericUpDownIncrement(NumericUpDownKi, 0.1M);
             ButtonShowSensors_Click(this, new EventArgs());
             foreach (PictureBox PB in PanelSensors.Controls)
             {
@@ -519,56 +473,13 @@ namespace COM_test
             }
         }
 
-        private void NumericUpDownKpSetIncrement(Decimal value)
+        private void SetNumericUpDownIncrement(NumericUpDown numeric, Decimal value)
         {
-            if (this.NumericUpDownKp.InvokeRequired)
-            {
-                NumericUpDownKpSetIncrementCallback x = new NumericUpDownKpSetIncrementCallback(NumericUpDownKpSetIncrement);
-                this.Invoke(x, new object[] { value });
-            }
+            MethodInvoker methodInvokerDelegate = delegate () { numeric.Increment = value; };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
             else
-            {
-                NumericUpDownKp.Increment = value;
-            }
-        }
-
-        private void NumericUpDownKdSetIncrement(Decimal value)
-        {
-            if (this.NumericUpDownKd.InvokeRequired)
-            {
-                NumericUpDownKdSetIncrementCallback x = new NumericUpDownKdSetIncrementCallback(NumericUpDownKdSetIncrement);
-                this.Invoke(x, new object[] { value });
-            }
-            else
-            {
-                NumericUpDownKd.Increment = value;
-            }
-        }
-
-        private void NumericUpDownKiSetIncrement(Decimal value)
-        {
-            if (this.NumericUpDownKi.InvokeRequired)
-            {
-                NumericUpDownKiSetIncrementCallback x = new NumericUpDownKiSetIncrementCallback(NumericUpDownKiSetIncrement);
-                this.Invoke(x, new object[] { value });
-            }
-            else
-            {
-                NumericUpDownKi.Increment = value;
-            }
-        }
-
-        private void SetPWMValue(int value)
-        {
-            if (this.NumericUpDownPWM.InvokeRequired)
-            {
-                SetPWMValueCallback x = new SetPWMValueCallback(SetPWMValue);
-                this.Invoke(x, new object[] { value });
-            }
-            else
-            {
-                NumericUpDownPWM.Value = value;
-            }
+                methodInvokerDelegate();
         }
 
         private void ButtonSendCallibration_Click(object sender, EventArgs e)
