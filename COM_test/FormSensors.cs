@@ -25,9 +25,24 @@ namespace COM_test
             InitializeComponent();
         }
 
-        private void HandleSensorsWeightsRecived(object sender, EventArgs e)
+        private void HandleSensorsWeightsRecived(object sender, SensorsWeightsRecivedEventArgs e)
         {
-            MessageBox.Show("Działa!");
+            foreach(Control num in GroupBoxSensorsWeights.Controls)
+            {
+                if(num is NumericUpDown)
+                {
+                    SetNumericUpDownValue((num as NumericUpDown), e.Values[Int32.Parse(num.Name.Substring(25))-1]);
+                }
+            }
+        }
+
+        public void SetNumericUpDownValue(NumericUpDown numeric, decimal value)
+        {
+            MethodInvoker methodInvokerDelegate = delegate () { numeric.Value = value; };
+            if (this.InvokeRequired)
+                this.Invoke(methodInvokerDelegate);
+            else
+                methodInvokerDelegate();
         }
 
         private void ButtonCheckWeights_Click(object sender, EventArgs e)

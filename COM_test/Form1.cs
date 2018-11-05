@@ -19,7 +19,7 @@ namespace COM_test
         public int[] SensorsWeights = new int[12];
         String DataIncomplete = String.Empty;
 
-        public event EventHandler SensorsWeightsRecived;
+        public event EventHandler<SensorsWeightsRecivedEventArgs> SensorsWeightsRecived;
 
         public Form1()
         {
@@ -39,7 +39,6 @@ namespace COM_test
                 SerialPortBt.Open();
                 LabelIsConn.Text = "Połączony";
                 ToolStripLabelPort.Text = "Port: " + SerialPortBt.PortName + " Baudrate: " + SerialPortBt.BaudRate;
-                //Timer1.Start();
                 SerialSend(Commands.SetMode);
                 SerialSend(Commands.Info);
                 Cursor.Current = Cursors.Default;
@@ -128,13 +127,6 @@ namespace COM_test
                 switch (DataCode)
                 {
                     case 'B':
-                        /*
-                        if (DataQueue.Peek()[DataQueue.Peek().Length - 1] != 'b')
-                        {
-                            Data = String.Empty;
-                            DataIncomplete = DataQueue.Dequeue();
-                            break;
-                        }*/
                         SetText(Environment.NewLine + "B:");
                         Single BattValue = 0;
                         try { BattValue = Convert.ToSingle(Data); }
@@ -204,13 +196,7 @@ namespace COM_test
                         string temp = DataQueue.Dequeue().Substring(1, 12);
                         foreach (PictureBox PB in PanelSensors.Controls)
                         {
-                            int num = 0;
-                            if (PB.Name.Length == 17)
-                                num = PB.Name[PB.Name.Length - 1] - '0';
-                            else
-                            if (PB.Name.Length == 18)
-                                num = Int32.Parse(PB.Name.Substring(PB.Name.Length - 2));
-                            if (temp[num] == '0')
+                            if (temp[Int32.Parse(PB.Name.Substring(16))] == '0')
                                 PB.Image = Properties.Resources.sensor_white;
                             else
                                 PB.Image = Properties.Resources.sensor_black;
@@ -242,7 +228,7 @@ namespace COM_test
                         string[] Val = Data.Split(new char[] { ':' });
                         SensorsWeights[Int32.Parse(Val[0])] = Int32.Parse(Val[1]);
                         DataQueue.Dequeue();
-                        //OnSensorsWeightsRecived();
+                        OnSensorsWeightsRecived(new SensorsWeightsRecivedEventArgs(SensorsWeights));
                         break;
                     default:
                         DataQueue.Dequeue();
@@ -250,7 +236,6 @@ namespace COM_test
                 }
                 if (Data != String.Empty)
                 {
-                    //if(!Debug || Data!="000000000000")
                     SetText(Data);
                     Data = String.Empty;
                 }
@@ -283,7 +268,7 @@ namespace COM_test
                 methodInvokerDelegate();
         }
 
-        private void SetNumericUpDownValue(NumericUpDown numeric, decimal value)
+        public void SetNumericUpDownValue(NumericUpDown numeric, decimal value)
         {
             MethodInvoker methodInvokerDelegate = delegate () { numeric.Value = value; };
             if (this.InvokeRequired)
@@ -458,7 +443,7 @@ namespace COM_test
 
         private void ButtonOfDoom_Click(object sender, EventArgs e)
         {
-            OnSensorsWeightsRecived(new EventArgs());
+            //OnSensorsWeightsRecived(new EventArgs());
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -594,7 +579,7 @@ namespace COM_test
             formSensors.Show();
         }
 
-        protected virtual void OnSensorsWeightsRecived(EventArgs e)
+        protected virtual void OnSensorsWeightsRecived(SensorsWeightsRecivedEventArgs e)
         {
             SensorsWeightsRecived?.Invoke(this, e);
         }
@@ -640,8 +625,10 @@ namespace COM_test
         }
     }
 
-    public class SesorsWeightsRecivedEventArgs : EventArgs //WTF
+    public class SensorsWeightsRecivedEventArgs : EventArgs
     {
-        public String[] Values { get; set; }
+        public int[] Values { get; }
+
+        public SensorsWeightsRecivedEventArgs(int[] vs) => Values = vs;
     }
 }
