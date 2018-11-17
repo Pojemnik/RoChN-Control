@@ -14,10 +14,13 @@ namespace COM_test
         private bool RaceMode = true;
         private int BenchmarkResult;
         private bool ExternalPower = false;
+        private bool DrawChart = false;
         public bool Debug = false;
         private bool ManualMode = false;
-        public int[] SensorsWeights = new int[12];
-        String DataIncomplete = String.Empty;
+        private int[] SensorsWeights;
+        private string DataIncomplete = String.Empty;
+
+        private float Kd, Kp, Ki, err, change, err_pre, err_pre_i;
 
         public event EventHandler<SensorsWeightsRecivedEventArgs> SensorsWeightsRecived;
 
@@ -28,6 +31,7 @@ namespace COM_test
             string[] ports = SerialPort.GetPortNames();
             foreach (string a in ports)
                 Combo.Items.Add(a);
+            Kd = Kp = Ki = -1;
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
@@ -92,7 +96,7 @@ namespace COM_test
                 BenchmarkResult++;
                 return;
             }
-            String Data = String.Empty;
+            string Data = String.Empty;
             if (DataIncomplete != String.Empty)
             {
                 Data = DataIncomplete;
@@ -128,7 +132,7 @@ namespace COM_test
                 {
                     case 'B':
                         SetText(Environment.NewLine + "B:");
-                        Single BattValue = 0;
+                        float BattValue = 0;
                         try { BattValue = Convert.ToSingle(Data); }
                         catch
                         {
@@ -194,6 +198,38 @@ namespace COM_test
                         }
                         SetText(Environment.NewLine);
                         string temp = DataQueue.Dequeue().Substring(1, 12);
+                        if (DrawChart)
+                        {
+                            int line = 0;
+                            int a = 0;
+                            for (int i = 0; i < 12; i++)
+                            {
+                                if (temp[i] == '1')
+                                {
+                                    line += SensorsWeights[i];
+                                    a++;
+                                }
+                            }
+                            err = 0 - line;
+                            change = (Kp * err) + (Kd * (err - err_pre)) + (Ki * (err + err_pre_i));
+                            if (a != 0 && err != 0)
+                            {
+                                err_pre = err;
+                                err_pre_i /= 3;
+                                err_pre_i += err;
+                            }
+                            System.Windows.Forms.DataVisualization.Charting.Series series = new System.Windows.Forms.DataVisualization.Charting.Series("change");
+                            series.Points.AddXY(100, change);
+                            MethodInvoker methodInvokerDelegate = delegate () { ChartData.Series.Add(series); };
+                            if (this.InvokeRequired)
+                                this.Invoke(methodInvokerDelegate);
+                            else
+                                methodInvokerDelegate();
+                            foreach (System.Windows.Forms.DataVisualization.Charting.Series ser in ChartData.Series)
+                            {
+                                ser.Points[0].XValue -= 1; // Naprawić, bo ciska wyjątkiem.
+                            }
+                        }
                         foreach (PictureBox PB in PanelSensors.Controls)
                         {
                             if (temp[Int32.Parse(PB.Name.Substring(16))] == '0')
@@ -204,17 +240,20 @@ namespace COM_test
                         break;
                     case 'P':
                         SetText(Environment.NewLine + "Kp:");
-                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        Kp = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Kp));
                         DataQueue.Dequeue();
                         break;
                     case 'I':
                         SetText(Environment.NewLine + "Ki:");
-                        SetNumericUpDownValue(NumericUpDownKi, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        Ki = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Ki));
                         DataQueue.Dequeue();
                         break;
                     case 'D':
                         SetText(Environment.NewLine + "Kd:");
-                        SetNumericUpDownValue(NumericUpDownKd, Convert.ToDecimal(Data, CultureInfo.InvariantCulture));
+                        Kd = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Kd));
                         DataQueue.Dequeue();
                         break;
                     case 'W':
@@ -226,7 +265,10 @@ namespace COM_test
                         break;
                     case 'Q':
                         string[] Val = Data.Split(new char[] { ':' });
-                        SensorsWeights[Int32.Parse(Val[0])] = Int32.Parse(Val[1]);
+                        int x = Int32.Parse(Val[0]);
+                        if (x == 0)
+                            SensorsWeights = new int[12];
+                        SensorsWeights[x] = Int32.Parse(Val[1]);
                         DataQueue.Dequeue();
                         OnSensorsWeightsRecived(new SensorsWeightsRecivedEventArgs(SensorsWeights));
                         break;
@@ -458,7 +500,7 @@ namespace COM_test
             }
         }
 
-        private void SetNumericUpDownIncrement(NumericUpDown numeric, Decimal value)
+        private void SetNumericUpDownIncrement(NumericUpDown numeric, decimal value)
         {
             MethodInvoker methodInvokerDelegate = delegate () { numeric.Increment = value; };
             if (this.InvokeRequired)
@@ -523,6 +565,13 @@ namespace COM_test
             SerialSend(Commands.SetDebug);
             Debug = CheckBoxDebug.Checked;
             ButtonShowSensors_Click(this, new EventArgs());
+            if (Debug && (Kp == -1 || Kd == -1 || Ki == -1 || SensorsWeights == null))
+            {
+                MessageBox.Show("Nie można rysować wykresu!\nNiekompletne dane.");
+                DrawChart = false;
+            }
+            else
+                DrawChart = true;
         }
 
         private void CheckBoxManualMode_CheckStateChanged(object sender, EventArgs e)

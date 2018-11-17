@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.Combo = new System.Windows.Forms.ComboBox();
@@ -95,6 +97,7 @@
             this.PictureBoxSensor0 = new System.Windows.Forms.PictureBox();
             this.ButtonShowSensors = new System.Windows.Forms.Button();
             this.GroupBoxSensors = new System.Windows.Forms.GroupBox();
+            this.ChartData = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.ButtonEditWeights = new System.Windows.Forms.Button();
             this.PictureBoxBatt = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
@@ -127,6 +130,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor0)).BeginInit();
             this.GroupBoxSensors.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxBatt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -244,6 +248,7 @@
             this.CheckBoxManualMode.Size = new System.Drawing.Size(117, 17);
             this.CheckBoxManualMode.TabIndex = 13;
             this.CheckBoxManualMode.Text = "Sterowanie ręczne ";
+            this.ToolTipTest.SetToolTip(this.CheckBoxManualMode, "Umożliwia ręczne sterowanie za pomacą klawiszy strzałek");
             this.CheckBoxManualMode.UseVisualStyleBackColor = true;
             this.CheckBoxManualMode.CheckStateChanged += new System.EventHandler(this.CheckBoxManualMode_CheckStateChanged);
             // 
@@ -269,6 +274,7 @@
             this.CheckBoxDebug.Size = new System.Drawing.Size(58, 17);
             this.CheckBoxDebug.TabIndex = 11;
             this.CheckBoxDebug.Text = "Debug";
+            this.ToolTipTest.SetToolTip(this.CheckBoxDebug, "Wyświetlanie stanów czujników w czasie rzeczywistym");
             this.CheckBoxDebug.UseVisualStyleBackColor = true;
             this.CheckBoxDebug.CheckStateChanged += new System.EventHandler(this.CheckBoxDebug_CheckStateChanged);
             // 
@@ -520,14 +526,14 @@
             // ToolStripStatusLabelEmpty
             // 
             this.ToolStripStatusLabelEmpty.Name = "ToolStripStatusLabelEmpty";
-            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(464, 17);
+            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(447, 17);
             this.ToolStripStatusLabelEmpty.Spring = true;
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(137, 17);
-            this.toolStripStatusLabel1.Text = "Wersja 1.0 (Kraków 2018)";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(123, 17);
+            this.toolStripStatusLabel1.Text = "Wersja 1.1 (Łódź 2018)";
             // 
             // splitter1
             // 
@@ -795,6 +801,7 @@
             // 
             // GroupBoxSensors
             // 
+            this.GroupBoxSensors.Controls.Add(this.ChartData);
             this.GroupBoxSensors.Controls.Add(this.ButtonEditWeights);
             this.GroupBoxSensors.Controls.Add(this.PanelSensors);
             this.GroupBoxSensors.Location = new System.Drawing.Point(12, 381);
@@ -803,6 +810,20 @@
             this.GroupBoxSensors.TabIndex = 27;
             this.GroupBoxSensors.TabStop = false;
             this.GroupBoxSensors.Text = "Opcje czujników";
+            // 
+            // ChartData
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.ChartData.ChartAreas.Add(chartArea1);
+            this.ChartData.Location = new System.Drawing.Point(409, 19);
+            this.ChartData.Name = "ChartData";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Name = "Series1";
+            this.ChartData.Series.Add(series1);
+            this.ChartData.Size = new System.Drawing.Size(238, 95);
+            this.ChartData.TabIndex = 29;
+            this.ChartData.Text = "chart1";
             // 
             // ButtonEditWeights
             // 
@@ -894,6 +915,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor0)).EndInit();
             this.GroupBoxSensors.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ChartData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxBatt)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -969,6 +991,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label LabelKi;
         private System.Windows.Forms.NumericUpDown NumericUpDownKi;
+        private System.Windows.Forms.DataVisualization.Charting.Chart ChartData;
     }
 }
 
