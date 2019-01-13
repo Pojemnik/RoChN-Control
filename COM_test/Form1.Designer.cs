@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ButtonConnect = new System.Windows.Forms.Button();
             this.Combo = new System.Windows.Forms.ComboBox();
@@ -97,7 +95,7 @@
             this.PictureBoxSensor0 = new System.Windows.Forms.PictureBox();
             this.ButtonShowSensors = new System.Windows.Forms.Button();
             this.GroupBoxSensors = new System.Windows.Forms.GroupBox();
-            this.ChartData = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.CheckBoxEnableSensors = new System.Windows.Forms.CheckBox();
             this.ButtonEditWeights = new System.Windows.Forms.Button();
             this.PictureBoxBatt = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
@@ -130,7 +128,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor0)).BeginInit();
             this.GroupBoxSensors.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ChartData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxBatt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -232,10 +229,9 @@
             // 
             this.groupBox1.Controls.Add(this.CheckBoxManualMode);
             this.groupBox1.Controls.Add(this.CheckBoxRaceMode);
-            this.groupBox1.Controls.Add(this.CheckBoxDebug);
-            this.groupBox1.Location = new System.Drawing.Point(438, 91);
+            this.groupBox1.Location = new System.Drawing.Point(3, 163);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 107);
+            this.groupBox1.Size = new System.Drawing.Size(233, 73);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Opcje robota";
@@ -243,7 +239,7 @@
             // CheckBoxManualMode
             // 
             this.CheckBoxManualMode.AutoSize = true;
-            this.CheckBoxManualMode.Location = new System.Drawing.Point(7, 66);
+            this.CheckBoxManualMode.Location = new System.Drawing.Point(6, 47);
             this.CheckBoxManualMode.Name = "CheckBoxManualMode";
             this.CheckBoxManualMode.Size = new System.Drawing.Size(117, 17);
             this.CheckBoxManualMode.TabIndex = 13;
@@ -257,7 +253,7 @@
             this.CheckBoxRaceMode.AutoSize = true;
             this.CheckBoxRaceMode.Checked = true;
             this.CheckBoxRaceMode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxRaceMode.Location = new System.Drawing.Point(6, 42);
+            this.CheckBoxRaceMode.Location = new System.Drawing.Point(6, 24);
             this.CheckBoxRaceMode.Name = "CheckBoxRaceMode";
             this.CheckBoxRaceMode.Size = new System.Drawing.Size(106, 17);
             this.CheckBoxRaceMode.TabIndex = 12;
@@ -269,7 +265,7 @@
             // CheckBoxDebug
             // 
             this.CheckBoxDebug.AutoSize = true;
-            this.CheckBoxDebug.Location = new System.Drawing.Point(6, 19);
+            this.CheckBoxDebug.Location = new System.Drawing.Point(305, 72);
             this.CheckBoxDebug.Name = "CheckBoxDebug";
             this.CheckBoxDebug.Size = new System.Drawing.Size(58, 17);
             this.CheckBoxDebug.TabIndex = 11;
@@ -356,8 +352,10 @@
             // 
             this.TabOptions.AutoScroll = true;
             this.TabOptions.BackColor = System.Drawing.Color.Transparent;
+            this.TabOptions.Controls.Add(this.ButtonBenchmark);
             this.TabOptions.Controls.Add(this.groupBox4);
             this.TabOptions.Controls.Add(this.groupBox3);
+            this.TabOptions.Controls.Add(this.groupBox1);
             this.TabOptions.Location = new System.Drawing.Point(4, 22);
             this.TabOptions.Name = "TabOptions";
             this.TabOptions.Size = new System.Drawing.Size(272, 258);
@@ -366,19 +364,19 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.ButtonBenchmark);
             this.groupBox4.Controls.Add(this.NumericUpDownBaudRate);
             this.groupBox4.Controls.Add(this.BaudRateLabel);
             this.groupBox4.Location = new System.Drawing.Point(3, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(200, 100);
+            this.groupBox4.Size = new System.Drawing.Size(235, 71);
             this.groupBox4.TabIndex = 12;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Opcje połączenia";
             // 
             // ButtonBenchmark
             // 
-            this.ButtonBenchmark.Location = new System.Drawing.Point(8, 66);
+            this.ButtonBenchmark.Enabled = false;
+            this.ButtonBenchmark.Location = new System.Drawing.Point(134, 39);
             this.ButtonBenchmark.Name = "ButtonBenchmark";
             this.ButtonBenchmark.Size = new System.Drawing.Size(102, 23);
             this.ButtonBenchmark.TabIndex = 2;
@@ -431,9 +429,9 @@
             this.groupBox3.Controls.Add(this.NumericUpDownBattDelay);
             this.groupBox3.Controls.Add(this.LabelOptionsBattDelay);
             this.groupBox3.Controls.Add(this.CheckBoxEcho);
-            this.groupBox3.Location = new System.Drawing.Point(8, 109);
+            this.groupBox3.Location = new System.Drawing.Point(3, 80);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(195, 100);
+            this.groupBox3.Size = new System.Drawing.Size(233, 82);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Opcje konsoli";
@@ -485,9 +483,9 @@
             // 
             // ButtonOfDoom
             // 
-            this.ButtonOfDoom.Location = new System.Drawing.Point(438, 213);
+            this.ButtonOfDoom.Location = new System.Drawing.Point(427, 23);
             this.ButtonOfDoom.Name = "ButtonOfDoom";
-            this.ButtonOfDoom.Size = new System.Drawing.Size(75, 48);
+            this.ButtonOfDoom.Size = new System.Drawing.Size(63, 48);
             this.ButtonOfDoom.TabIndex = 18;
             this.ButtonOfDoom.Text = "Guzik zagłady";
             this.ButtonOfDoom.UseVisualStyleBackColor = true;
@@ -497,13 +495,13 @@
             // PictureBoxLogo
             // 
             this.PictureBoxLogo.Image = global::COM_test.Properties.Resources.male;
-            this.PictureBoxLogo.Location = new System.Drawing.Point(571, 325);
+            this.PictureBoxLogo.Location = new System.Drawing.Point(438, 462);
             this.PictureBoxLogo.Name = "PictureBoxLogo";
             this.PictureBoxLogo.Size = new System.Drawing.Size(50, 50);
             this.PictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureBoxLogo.TabIndex = 28;
             this.PictureBoxLogo.TabStop = false;
-            this.ToolTipTest.SetToolTip(this.PictureBoxLogo, "Autor programu: Andrzej Gauza\r\nKoło Robotyczne Ósmego Liceum");
+            this.ToolTipTest.SetToolTip(this.PictureBoxLogo, "Autor programu: Andrzej \"Pojemnik\" Gauza\r\nKoło Robotyczne Ósmego Liceum");
             // 
             // StatusStripBottom
             // 
@@ -511,9 +509,9 @@
             this.ToolStripLabelPort,
             this.ToolStripStatusLabelEmpty,
             this.toolStripStatusLabel1});
-            this.StatusStripBottom.Location = new System.Drawing.Point(0, 540);
+            this.StatusStripBottom.Location = new System.Drawing.Point(0, 519);
             this.StatusStripBottom.Name = "StatusStripBottom";
-            this.StatusStripBottom.Size = new System.Drawing.Size(674, 22);
+            this.StatusStripBottom.Size = new System.Drawing.Size(495, 22);
             this.StatusStripBottom.TabIndex = 19;
             this.StatusStripBottom.Text = "statusStrip1";
             // 
@@ -526,20 +524,20 @@
             // ToolStripStatusLabelEmpty
             // 
             this.ToolStripStatusLabelEmpty.Name = "ToolStripStatusLabelEmpty";
-            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(447, 17);
+            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(217, 17);
             this.ToolStripStatusLabelEmpty.Spring = true;
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(123, 17);
-            this.toolStripStatusLabel1.Text = "Wersja 1.1 (Łódź 2018)";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(205, 17);
+            this.toolStripStatusLabel1.Text = "Wersja 1.2 (Wrocław/Warszawa) 2019)";
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 540);
+            this.splitter1.Size = new System.Drawing.Size(3, 519);
             this.splitter1.TabIndex = 20;
             this.splitter1.TabStop = false;
             // 
@@ -791,7 +789,7 @@
             // 
             this.ButtonShowSensors.BackColor = System.Drawing.Color.Transparent;
             this.ButtonShowSensors.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.ButtonShowSensors.Location = new System.Drawing.Point(438, 349);
+            this.ButtonShowSensors.Location = new System.Drawing.Point(438, 357);
             this.ButtonShowSensors.Name = "ButtonShowSensors";
             this.ButtonShowSensors.Size = new System.Drawing.Size(23, 18);
             this.ButtonShowSensors.TabIndex = 26;
@@ -801,29 +799,27 @@
             // 
             // GroupBoxSensors
             // 
-            this.GroupBoxSensors.Controls.Add(this.ChartData);
+            this.GroupBoxSensors.Controls.Add(this.CheckBoxEnableSensors);
             this.GroupBoxSensors.Controls.Add(this.ButtonEditWeights);
+            this.GroupBoxSensors.Controls.Add(this.CheckBoxDebug);
             this.GroupBoxSensors.Controls.Add(this.PanelSensors);
             this.GroupBoxSensors.Location = new System.Drawing.Point(12, 381);
             this.GroupBoxSensors.Name = "GroupBoxSensors";
-            this.GroupBoxSensors.Size = new System.Drawing.Size(653, 131);
+            this.GroupBoxSensors.Size = new System.Drawing.Size(420, 131);
             this.GroupBoxSensors.TabIndex = 27;
             this.GroupBoxSensors.TabStop = false;
             this.GroupBoxSensors.Text = "Opcje czujników";
             // 
-            // ChartData
+            // CheckBoxEnableSensors
             // 
-            chartArea1.Name = "ChartArea1";
-            this.ChartData.ChartAreas.Add(chartArea1);
-            this.ChartData.Location = new System.Drawing.Point(409, 19);
-            this.ChartData.Name = "ChartData";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Name = "Series1";
-            this.ChartData.Series.Add(series1);
-            this.ChartData.Size = new System.Drawing.Size(238, 95);
-            this.ChartData.TabIndex = 29;
-            this.ChartData.Text = "chart1";
+            this.CheckBoxEnableSensors.AutoSize = true;
+            this.CheckBoxEnableSensors.Location = new System.Drawing.Point(305, 49);
+            this.CheckBoxEnableSensors.Name = "CheckBoxEnableSensors";
+            this.CheckBoxEnableSensors.Size = new System.Drawing.Size(62, 17);
+            this.CheckBoxEnableSensors.TabIndex = 27;
+            this.CheckBoxEnableSensors.Text = "Czujniki";
+            this.CheckBoxEnableSensors.UseVisualStyleBackColor = true;
+            this.CheckBoxEnableSensors.CheckedChanged += new System.EventHandler(this.CheckBoxEnableSensors_CheckedChanged);
             // 
             // ButtonEditWeights
             // 
@@ -852,7 +848,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.ButtonStop;
-            this.ClientSize = new System.Drawing.Size(674, 562);
+            this.ClientSize = new System.Drawing.Size(495, 541);
             this.Controls.Add(this.PictureBoxLogo);
             this.Controls.Add(this.GroupBoxSensors);
             this.Controls.Add(this.ButtonShowSensors);
@@ -860,7 +856,6 @@
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.StatusStripBottom);
             this.Controls.Add(this.ButtonOfDoom);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.TabControlMenu);
             this.Controls.Add(this.LabelBatt);
             this.Controls.Add(this.PictureBoxBatt);
@@ -875,7 +870,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "Form1";
-            this.Text = "RoChN Control V2";
+            this.Text = "RoChN Control";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
@@ -915,7 +910,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxSensor0)).EndInit();
             this.GroupBoxSensors.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ChartData)).EndInit();
+            this.GroupBoxSensors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxBatt)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -991,7 +986,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label LabelKi;
         private System.Windows.Forms.NumericUpDown NumericUpDownKi;
-        private System.Windows.Forms.DataVisualization.Charting.Chart ChartData;
+        private System.Windows.Forms.CheckBox CheckBoxEnableSensors;
     }
 }
 
