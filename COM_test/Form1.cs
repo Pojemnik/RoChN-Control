@@ -17,9 +17,15 @@ namespace COM_test
         private bool ExternalPower = false;
         public bool Debug = false;
         private bool ManualMode = false;
-        private int[] SensorsWeights;
+        private short[] SensorsWeights = { -1 };
+        private short[] AdditionalSensorsWeights = { -1 };
         private string DataIncomplete = String.Empty;
         private bool IsConnected = false;
+        private List<byte> DataList = new List<byte>();
+        private bool GenerateOutput = false;
+        private System.IO.BinaryWriter Writer;
+
+        System.IO.Stream file;
 
         private float Kd, Kp, Ki;
 
@@ -46,6 +52,7 @@ namespace COM_test
                 ToolStripLabelPort.Text = "Port: " + SerialPortBt.PortName + " Baudrate: " + SerialPortBt.BaudRate;
                 SerialSend(Commands.SetMode);
                 SerialSend(Commands.Info);
+                SerialSend(Commands.CheckSensorsWeights);
                 Cursor.Current = Cursors.Default;
                 IsConnected = true;
             }
@@ -201,6 +208,26 @@ namespace COM_test
                         }
                         SetText(Environment.NewLine);
                         string temp = DataQueue.Dequeue().Substring(1, 12);
+                        string temp2 = temp;
+                        if (GenerateOutput)
+                        {
+                            byte l;
+                            l = 0;
+                            for (int i = 0; i < 8; i++)
+                            {
+                                l <<= 1;
+                                l += Convert.ToByte(temp2[i] == '1' ? 1 : 0);
+                            }
+                            DataList.Add(l);
+                            l = 0;
+                            for (int i = 8; i < 12; i++)
+                            {
+                                l <<= 1;
+                                l += Convert.ToByte(temp2[i] == '1' ? 1 : 0);
+                            }
+                            l <<= 4;
+                            DataList.Add(l);
+                        }
                         foreach (PictureBox PB in PanelSensors.Controls)
                         {
                             if (temp[Int32.Parse(PB.Name.Substring(16))] == '0')
@@ -238,10 +265,23 @@ namespace COM_test
                         string[] Val = Data.Split(new char[] { ':' });
                         int x = Int32.Parse(Val[0]);
                         if (x == 0)
-                            SensorsWeights = new int[12];
-                        SensorsWeights[x] = Int32.Parse(Val[1]);
+                            SensorsWeights = new short[12];
+                        SensorsWeights[x] = Int16.Parse(Val[1]);
                         DataQueue.Dequeue();
                         OnSensorsWeightsRecived(new SensorsWeightsRecivedEventArgs(SensorsWeights));
+                        break;
+                    case 'A':
+                        string[] Val2 = Data.Split(new char[] { ':' });
+                        if (Val2.Length != 2)
+                        {
+                            DataQueue.Dequeue();
+                            break;
+                        }
+                        AdditionalSensorsWeights = new short[2];
+                        AdditionalSensorsWeights[0] = Int16.Parse(Val2[0]);
+                        AdditionalSensorsWeights[1] = Int16.Parse(Val2[1]);
+                        OnSensorsWeightsRecived(new SensorsWeightsRecivedEventArgs(AdditionalSensorsWeights));
+                        DataQueue.Dequeue();
                         break;
                     default:
                         DataQueue.Dequeue();
@@ -505,7 +545,7 @@ namespace COM_test
         {
             if (this.Size.Height == 440 || Debug)
             {
-                Resize(this.Size.Width, 580);
+                Resize(this.Size.Width, 600);
                 ButtonShowSensors.Text = "▲";
                 SetControlVisibility(GroupBoxSensors, true);
                 SetControlVisibility(PanelSensors, true);
@@ -548,15 +588,30 @@ namespace COM_test
                 SerialSend(Commands.SwitchSensors);
                 SensorsEnabled = CheckBoxEnableSensors.Checked;
             }
+            else
+                CheckBoxEnableSensors.Checked = false;
         }
 
         private void CheckBoxDebug_CheckStateChanged(object sender, EventArgs e)
         {
-            if (IsConnected)
+            if (CheckBoxDebug.Checked == true)
             {
-                SerialSend(Commands.SetDebug);
-                Debug = CheckBoxDebug.Checked;
-                ButtonShowSensors_Click(this, new EventArgs());
+                if (IsConnected)
+                {
+                    SerialSend(Commands.SetDebug);
+                    Debug = true;
+                }
+                else
+                    CheckBoxDebug.Checked = false;
+            }
+            else
+            {
+                if (IsConnected)
+                {
+                    SerialSend(Commands.SetDebug);
+                    ButtonShowSensors_Click(this, new EventArgs());
+                }
+                Debug = false;
             }
         }
 
@@ -607,10 +662,82 @@ namespace COM_test
             }
         }
 
+        private void CheckBoxGenerateFile_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxGenerateFile.Checked)
+            {
+                if (SensorsWeights.Length == 12)
+                {
+                    GenerateOutput = true;
+                    try
+                    {
+                        file = System.IO.File.Create(DateTime.Now.ToString("HH-mm-ss__dd-MM") + ".lf3");
+                        Writer = new System.IO.BinaryWriter(file);
+                        Writer.Write("lf3");
+                        Writer.Write(AdditionalSensorsWeights[0]);
+                        for (int i = 0; i < 12; i++)
+                            Writer.Write(SensorsWeights[i]);
+                        Writer.Write(AdditionalSensorsWeights[1]);
+                        Writer.Write(Kp);
+                        Writer.Write(Kd);
+                        Writer.Write(Ki);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Nie można stworzyć pliku!");
+                        CheckBoxGenerateFile.Checked = false;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Brak wag czujników!");
+                    CheckBoxGenerateFile.Checked = false;
+                }
+            }
+            else
+            {
+                GenerateOutput = false;
+            }
+        }
+
+        private void ButtonSave_Click(object sender, EventArgs e)
+        {
+            if (GenerateOutput)
+            {
+                try
+                {
+                    if (file.CanWrite)
+                    {
+                        byte[] arr = DataList.ToArray();
+                        Writer.Write(DataList.Count);
+                        Writer.Write(0xffffffff);
+                        Writer.Write(0xffffffff);
+                        Writer.Write(0xffffffff);
+                        Writer.Write(0xffffffff);
+                        Writer.Write(arr);
+                        Writer.Write("lf3");
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Błąd!");
+                }
+                finally
+                {
+                    MessageBox.Show("Zapisano plik.");
+                    Writer.Dispose();
+                }
+            }
+        }
+
         private void ButtonEditWeights_Click(object sender, EventArgs e)
         {
             FormSensors formSensors = new FormSensors(this);
             formSensors.Show();
+            if (SensorsWeights.Length == 12)
+                SensorsWeightsRecived(this, new SensorsWeightsRecivedEventArgs(SensorsWeights));
+            if(AdditionalSensorsWeights.Length == 2)
+                SensorsWeightsRecived(this, new SensorsWeightsRecivedEventArgs(AdditionalSensorsWeights));
         }
 
         protected virtual void OnSensorsWeightsRecived(SensorsWeightsRecivedEventArgs e)
@@ -642,6 +769,7 @@ namespace COM_test
         public const string Right = ">";
         public const string Left = "<";
         public const string CheckSensorsWeights = "Q";
+        public const string CheckAdditionalSensorsWeights = "A";
         public const string SwitchSensors = "7";
         public const string KiValue = "i";
         public const string SetKi = "I";
@@ -661,8 +789,8 @@ namespace COM_test
 
     public class SensorsWeightsRecivedEventArgs : EventArgs
     {
-        public int[] Values { get; }
+        public short[] Values { get; }
 
-        public SensorsWeightsRecivedEventArgs(int[] vs) => Values = vs;
+        public SensorsWeightsRecivedEventArgs(short[] vs) => Values = vs;
     }
 }

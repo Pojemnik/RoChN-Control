@@ -52,8 +52,8 @@
             this.TabControlMenu = new System.Windows.Forms.TabControl();
             this.TabDataRaw = new System.Windows.Forms.TabPage();
             this.TabOptions = new System.Windows.Forms.TabPage();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.ButtonBenchmark = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.NumericUpDownBaudRate = new System.Windows.Forms.NumericUpDown();
             this.BaudRateLabel = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -95,6 +95,8 @@
             this.PictureBoxSensor0 = new System.Windows.Forms.PictureBox();
             this.ButtonShowSensors = new System.Windows.Forms.Button();
             this.GroupBoxSensors = new System.Windows.Forms.GroupBox();
+            this.ButtonSave = new System.Windows.Forms.Button();
+            this.CheckBoxGenerateFile = new System.Windows.Forms.CheckBox();
             this.CheckBoxEnableSensors = new System.Windows.Forms.CheckBox();
             this.ButtonEditWeights = new System.Windows.Forms.Button();
             this.PictureBoxBatt = new System.Windows.Forms.PictureBox();
@@ -222,6 +224,7 @@
             this.CheckBoxEcho.Size = new System.Drawing.Size(51, 17);
             this.CheckBoxEcho.TabIndex = 10;
             this.CheckBoxEcho.Text = "Echo";
+            this.ToolTipTest.SetToolTip(this.CheckBoxEcho, "Włącz/wyłącz echo konsoli");
             this.CheckBoxEcho.UseVisualStyleBackColor = true;
             this.CheckBoxEcho.CheckStateChanged += new System.EventHandler(this.CheckBoxEcho_CheckStateChanged);
             // 
@@ -362,17 +365,6 @@
             this.TabOptions.TabIndex = 2;
             this.TabOptions.Text = "Opcje konsoli";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.NumericUpDownBaudRate);
-            this.groupBox4.Controls.Add(this.BaudRateLabel);
-            this.groupBox4.Location = new System.Drawing.Point(3, 3);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(235, 71);
-            this.groupBox4.TabIndex = 12;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Opcje połączenia";
-            // 
             // ButtonBenchmark
             // 
             this.ButtonBenchmark.Enabled = false;
@@ -384,6 +376,17 @@
             this.ButtonBenchmark.UseVisualStyleBackColor = true;
             this.ButtonBenchmark.Visible = false;
             this.ButtonBenchmark.Click += new System.EventHandler(this.ButtonBenchmark_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.NumericUpDownBaudRate);
+            this.groupBox4.Controls.Add(this.BaudRateLabel);
+            this.groupBox4.Location = new System.Drawing.Point(3, 3);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(235, 71);
+            this.groupBox4.TabIndex = 12;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Opcje połączenia";
             // 
             // NumericUpDownBaudRate
             // 
@@ -408,6 +411,7 @@
             this.NumericUpDownBaudRate.Size = new System.Drawing.Size(120, 20);
             this.NumericUpDownBaudRate.TabIndex = 1;
             this.NumericUpDownBaudRate.ThousandsSeparator = true;
+            this.ToolTipTest.SetToolTip(this.NumericUpDownBaudRate, "Ustaw szybkość transmisji");
             this.NumericUpDownBaudRate.Value = new decimal(new int[] {
             115200,
             0,
@@ -488,6 +492,7 @@
             this.ButtonOfDoom.Size = new System.Drawing.Size(63, 48);
             this.ButtonOfDoom.TabIndex = 18;
             this.ButtonOfDoom.Text = "Guzik zagłady";
+            this.ToolTipTest.SetToolTip(this.ButtonOfDoom, "Zagłada!!!!");
             this.ButtonOfDoom.UseVisualStyleBackColor = true;
             this.ButtonOfDoom.Visible = false;
             this.ButtonOfDoom.Click += new System.EventHandler(this.ButtonOfDoom_Click);
@@ -495,7 +500,7 @@
             // PictureBoxLogo
             // 
             this.PictureBoxLogo.Image = global::COM_test.Properties.Resources.male;
-            this.PictureBoxLogo.Location = new System.Drawing.Point(438, 462);
+            this.PictureBoxLogo.Location = new System.Drawing.Point(438, 301);
             this.PictureBoxLogo.Name = "PictureBoxLogo";
             this.PictureBoxLogo.Size = new System.Drawing.Size(50, 50);
             this.PictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -509,9 +514,9 @@
             this.ToolStripLabelPort,
             this.ToolStripStatusLabelEmpty,
             this.toolStripStatusLabel1});
-            this.StatusStripBottom.Location = new System.Drawing.Point(0, 519);
+            this.StatusStripBottom.Location = new System.Drawing.Point(0, 540);
             this.StatusStripBottom.Name = "StatusStripBottom";
-            this.StatusStripBottom.Size = new System.Drawing.Size(495, 22);
+            this.StatusStripBottom.Size = new System.Drawing.Size(504, 22);
             this.StatusStripBottom.TabIndex = 19;
             this.StatusStripBottom.Text = "statusStrip1";
             // 
@@ -524,20 +529,20 @@
             // ToolStripStatusLabelEmpty
             // 
             this.ToolStripStatusLabelEmpty.Name = "ToolStripStatusLabelEmpty";
-            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(217, 17);
+            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(285, 17);
             this.ToolStripStatusLabelEmpty.Spring = true;
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(205, 17);
-            this.toolStripStatusLabel1.Text = "Wersja 1.2 (Wrocław/Warszawa) 2019)";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(146, 17);
+            this.toolStripStatusLabel1.Text = "Wersja 1.3 Warszawa 2019)";
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 519);
+            this.splitter1.Size = new System.Drawing.Size(3, 540);
             this.splitter1.TabIndex = 20;
             this.splitter1.TabStop = false;
             // 
@@ -799,16 +804,41 @@
             // 
             // GroupBoxSensors
             // 
+            this.GroupBoxSensors.Controls.Add(this.ButtonSave);
+            this.GroupBoxSensors.Controls.Add(this.CheckBoxGenerateFile);
             this.GroupBoxSensors.Controls.Add(this.CheckBoxEnableSensors);
             this.GroupBoxSensors.Controls.Add(this.ButtonEditWeights);
             this.GroupBoxSensors.Controls.Add(this.CheckBoxDebug);
             this.GroupBoxSensors.Controls.Add(this.PanelSensors);
             this.GroupBoxSensors.Location = new System.Drawing.Point(12, 381);
             this.GroupBoxSensors.Name = "GroupBoxSensors";
-            this.GroupBoxSensors.Size = new System.Drawing.Size(420, 131);
+            this.GroupBoxSensors.Size = new System.Drawing.Size(478, 156);
             this.GroupBoxSensors.TabIndex = 27;
             this.GroupBoxSensors.TabStop = false;
             this.GroupBoxSensors.Text = "Opcje czujników";
+            // 
+            // ButtonSave
+            // 
+            this.ButtonSave.Location = new System.Drawing.Point(393, 91);
+            this.ButtonSave.Name = "ButtonSave";
+            this.ButtonSave.Size = new System.Drawing.Size(75, 23);
+            this.ButtonSave.TabIndex = 29;
+            this.ButtonSave.Text = "Zapisz";
+            this.ToolTipTest.SetToolTip(this.ButtonSave, "Zapisz dane do pliku");
+            this.ButtonSave.UseVisualStyleBackColor = true;
+            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
+            // 
+            // CheckBoxGenerateFile
+            // 
+            this.CheckBoxGenerateFile.AutoSize = true;
+            this.CheckBoxGenerateFile.Location = new System.Drawing.Point(305, 95);
+            this.CheckBoxGenerateFile.Name = "CheckBoxGenerateFile";
+            this.CheckBoxGenerateFile.Size = new System.Drawing.Size(82, 17);
+            this.CheckBoxGenerateFile.TabIndex = 28;
+            this.CheckBoxGenerateFile.Text = "Generuj plik";
+            this.ToolTipTest.SetToolTip(this.CheckBoxGenerateFile, "Generuj plik z danymi  z robota w formacie lf3");
+            this.CheckBoxGenerateFile.UseVisualStyleBackColor = true;
+            this.CheckBoxGenerateFile.CheckedChanged += new System.EventHandler(this.CheckBoxGenerateFile_CheckedChanged);
             // 
             // CheckBoxEnableSensors
             // 
@@ -818,6 +848,7 @@
             this.CheckBoxEnableSensors.Size = new System.Drawing.Size(62, 17);
             this.CheckBoxEnableSensors.TabIndex = 27;
             this.CheckBoxEnableSensors.Text = "Czujniki";
+            this.ToolTipTest.SetToolTip(this.CheckBoxEnableSensors, "Włącz/wyłącz czujniki linii w robocie");
             this.CheckBoxEnableSensors.UseVisualStyleBackColor = true;
             this.CheckBoxEnableSensors.CheckedChanged += new System.EventHandler(this.CheckBoxEnableSensors_CheckedChanged);
             // 
@@ -828,6 +859,7 @@
             this.ButtonEditWeights.Size = new System.Drawing.Size(98, 23);
             this.ButtonEditWeights.TabIndex = 26;
             this.ButtonEditWeights.Text = "Wagi czujników";
+            this.ToolTipTest.SetToolTip(this.ButtonEditWeights, "Otwiera okienko z wagami czujników");
             this.ButtonEditWeights.UseVisualStyleBackColor = true;
             this.ButtonEditWeights.Click += new System.EventHandler(this.ButtonEditWeights_Click);
             // 
@@ -848,7 +880,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.ButtonStop;
-            this.ClientSize = new System.Drawing.Size(495, 541);
+            this.ClientSize = new System.Drawing.Size(504, 562);
             this.Controls.Add(this.PictureBoxLogo);
             this.Controls.Add(this.GroupBoxSensors);
             this.Controls.Add(this.ButtonShowSensors);
@@ -987,6 +1019,8 @@
         private System.Windows.Forms.Label LabelKi;
         private System.Windows.Forms.NumericUpDown NumericUpDownKi;
         private System.Windows.Forms.CheckBox CheckBoxEnableSensors;
+        private System.Windows.Forms.CheckBox CheckBoxGenerateFile;
+        private System.Windows.Forms.Button ButtonSave;
     }
 }
 

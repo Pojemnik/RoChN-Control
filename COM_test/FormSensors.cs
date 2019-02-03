@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace COM_test
@@ -27,12 +20,23 @@ namespace COM_test
 
         private void HandleSensorsWeightsRecived(object sender, SensorsWeightsRecivedEventArgs e)
         {
-            foreach(Control num in GroupBoxSensorsWeights.Controls)
+            if (e.Values.Length == 12)
             {
-                if(num is NumericUpDown)
+                foreach (Control num in GroupBoxSensorsWeights.Controls)
                 {
-                    SetNumericUpDownValue((num as NumericUpDown), e.Values[Int32.Parse(num.Name.Substring(25))-1]);
+                    if (num is NumericUpDown)
+                    {
+                        if(num.Name[13] != 'A')
+                        {
+                            SetNumericUpDownValue((num as NumericUpDown), e.Values[Int16.Parse(num.Name.Substring(25)) - 1]);
+                        }
+                    }
                 }
+            }
+            else
+            {
+                SetNumericUpDownValue(NumericUpDownASensor1, Convert.ToDecimal(e.Values[0]));
+                SetNumericUpDownValue(NumericUpDownASensor2, Convert.ToDecimal(e.Values[1]));
             }
         }
 

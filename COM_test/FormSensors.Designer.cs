@@ -44,6 +44,8 @@
             this.GroupBoxSensorsWeights = new System.Windows.Forms.GroupBox();
             this.ButtonCheckWeights = new System.Windows.Forms.Button();
             this.ButtonSendWeights = new System.Windows.Forms.Button();
+            this.NumericUpDownASensor1 = new System.Windows.Forms.NumericUpDown();
+            this.NumericUpDownASensor2 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight3)).BeginInit();
@@ -57,6 +59,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight11)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight12)).BeginInit();
             this.GroupBoxSensorsWeights.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownASensor1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownASensor2)).BeginInit();
             this.SuspendLayout();
             // 
             // NumericUpDownSensorWeight1
@@ -265,6 +269,8 @@
             // 
             // GroupBoxSensorsWeights
             // 
+            this.GroupBoxSensorsWeights.Controls.Add(this.NumericUpDownASensor2);
+            this.GroupBoxSensorsWeights.Controls.Add(this.NumericUpDownASensor1);
             this.GroupBoxSensorsWeights.Controls.Add(this.NumericUpDownSensorWeight1);
             this.GroupBoxSensorsWeights.Controls.Add(this.NumericUpDownSensorWeight12);
             this.GroupBoxSensorsWeights.Controls.Add(this.NumericUpDownSensorWeight2);
@@ -296,12 +302,47 @@
             // 
             // ButtonSendWeights
             // 
+            this.ButtonSendWeights.Enabled = false;
             this.ButtonSendWeights.Location = new System.Drawing.Point(93, 174);
             this.ButtonSendWeights.Name = "ButtonSendWeights";
             this.ButtonSendWeights.Size = new System.Drawing.Size(75, 23);
             this.ButtonSendWeights.TabIndex = 14;
             this.ButtonSendWeights.Text = "Wyślij";
             this.ButtonSendWeights.UseVisualStyleBackColor = true;
+            // 
+            // NumericUpDownASensor1
+            // 
+            this.NumericUpDownASensor1.Location = new System.Drawing.Point(18, 18);
+            this.NumericUpDownASensor1.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.NumericUpDownASensor1.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            -2147483648});
+            this.NumericUpDownASensor1.Name = "NumericUpDownASensor1";
+            this.NumericUpDownASensor1.Size = new System.Drawing.Size(37, 20);
+            this.NumericUpDownASensor1.TabIndex = 12;
+            // 
+            // NumericUpDownASensor2
+            // 
+            this.NumericUpDownASensor2.Location = new System.Drawing.Point(491, 18);
+            this.NumericUpDownASensor2.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.NumericUpDownASensor2.Minimum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            -2147483648});
+            this.NumericUpDownASensor2.Name = "NumericUpDownASensor2";
+            this.NumericUpDownASensor2.Size = new System.Drawing.Size(37, 20);
+            this.NumericUpDownASensor2.TabIndex = 15;
             // 
             // FormSensors
             // 
@@ -328,6 +369,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight11)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownSensorWeight12)).EndInit();
             this.GroupBoxSensorsWeights.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownASensor1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownASensor2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -349,5 +392,7 @@
         private System.Windows.Forms.GroupBox GroupBoxSensorsWeights;
         private System.Windows.Forms.Button ButtonCheckWeights;
         private System.Windows.Forms.Button ButtonSendWeights;
+        private System.Windows.Forms.NumericUpDown NumericUpDownASensor2;
+        private System.Windows.Forms.NumericUpDown NumericUpDownASensor1;
     }
 }
