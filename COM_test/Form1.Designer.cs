@@ -64,6 +64,10 @@
             this.ButtonOfDoom = new System.Windows.Forms.Button();
             this.ToolTipTest = new System.Windows.Forms.ToolTip(this.components);
             this.PictureBoxLogo = new System.Windows.Forms.PictureBox();
+            this.ButtonSave = new System.Windows.Forms.Button();
+            this.CheckBoxGenerateFile = new System.Windows.Forms.CheckBox();
+            this.CheckBoxEnableSensors = new System.Windows.Forms.CheckBox();
+            this.ButtonEditWeights = new System.Windows.Forms.Button();
             this.StatusStripBottom = new System.Windows.Forms.StatusStrip();
             this.ToolStripLabelPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.ToolStripStatusLabelEmpty = new System.Windows.Forms.ToolStripStatusLabel();
@@ -95,11 +99,8 @@
             this.PictureBoxSensor0 = new System.Windows.Forms.PictureBox();
             this.ButtonShowSensors = new System.Windows.Forms.Button();
             this.GroupBoxSensors = new System.Windows.Forms.GroupBox();
-            this.ButtonSave = new System.Windows.Forms.Button();
-            this.CheckBoxGenerateFile = new System.Windows.Forms.CheckBox();
-            this.CheckBoxEnableSensors = new System.Windows.Forms.CheckBox();
-            this.ButtonEditWeights = new System.Windows.Forms.Button();
             this.PictureBoxBatt = new System.Windows.Forms.PictureBox();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.TabControlMenu.SuspendLayout();
@@ -508,6 +509,52 @@
             this.PictureBoxLogo.TabStop = false;
             this.ToolTipTest.SetToolTip(this.PictureBoxLogo, "Autor programu: Andrzej \"Pojemnik\" Gauza\r\nKoło Robotyczne Ósmego Liceum");
             // 
+            // ButtonSave
+            // 
+            this.ButtonSave.Location = new System.Drawing.Point(393, 91);
+            this.ButtonSave.Name = "ButtonSave";
+            this.ButtonSave.Size = new System.Drawing.Size(75, 23);
+            this.ButtonSave.TabIndex = 29;
+            this.ButtonSave.Text = "Zapisz";
+            this.ToolTipTest.SetToolTip(this.ButtonSave, "Zapisz dane do pliku");
+            this.ButtonSave.UseVisualStyleBackColor = true;
+            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
+            // 
+            // CheckBoxGenerateFile
+            // 
+            this.CheckBoxGenerateFile.AutoSize = true;
+            this.CheckBoxGenerateFile.Location = new System.Drawing.Point(305, 95);
+            this.CheckBoxGenerateFile.Name = "CheckBoxGenerateFile";
+            this.CheckBoxGenerateFile.Size = new System.Drawing.Size(82, 17);
+            this.CheckBoxGenerateFile.TabIndex = 28;
+            this.CheckBoxGenerateFile.Text = "Generuj plik";
+            this.ToolTipTest.SetToolTip(this.CheckBoxGenerateFile, "Generuj plik z danymi  z robota w formacie lf3");
+            this.CheckBoxGenerateFile.UseVisualStyleBackColor = true;
+            this.CheckBoxGenerateFile.CheckedChanged += new System.EventHandler(this.CheckBoxGenerateFile_CheckedChanged);
+            // 
+            // CheckBoxEnableSensors
+            // 
+            this.CheckBoxEnableSensors.AutoSize = true;
+            this.CheckBoxEnableSensors.Location = new System.Drawing.Point(305, 49);
+            this.CheckBoxEnableSensors.Name = "CheckBoxEnableSensors";
+            this.CheckBoxEnableSensors.Size = new System.Drawing.Size(62, 17);
+            this.CheckBoxEnableSensors.TabIndex = 27;
+            this.CheckBoxEnableSensors.Text = "Czujniki";
+            this.ToolTipTest.SetToolTip(this.CheckBoxEnableSensors, "Włącz/wyłącz czujniki linii w robocie");
+            this.CheckBoxEnableSensors.UseVisualStyleBackColor = true;
+            this.CheckBoxEnableSensors.CheckedChanged += new System.EventHandler(this.CheckBoxEnableSensors_CheckedChanged);
+            // 
+            // ButtonEditWeights
+            // 
+            this.ButtonEditWeights.Location = new System.Drawing.Point(305, 19);
+            this.ButtonEditWeights.Name = "ButtonEditWeights";
+            this.ButtonEditWeights.Size = new System.Drawing.Size(98, 23);
+            this.ButtonEditWeights.TabIndex = 26;
+            this.ButtonEditWeights.Text = "Wagi czujników";
+            this.ToolTipTest.SetToolTip(this.ButtonEditWeights, "Otwiera okienko z wagami czujników");
+            this.ButtonEditWeights.UseVisualStyleBackColor = true;
+            this.ButtonEditWeights.Click += new System.EventHandler(this.ButtonEditWeights_Click);
+            // 
             // StatusStripBottom
             // 
             this.StatusStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -817,52 +864,6 @@
             this.GroupBoxSensors.TabStop = false;
             this.GroupBoxSensors.Text = "Opcje czujników";
             // 
-            // ButtonSave
-            // 
-            this.ButtonSave.Location = new System.Drawing.Point(393, 91);
-            this.ButtonSave.Name = "ButtonSave";
-            this.ButtonSave.Size = new System.Drawing.Size(75, 23);
-            this.ButtonSave.TabIndex = 29;
-            this.ButtonSave.Text = "Zapisz";
-            this.ToolTipTest.SetToolTip(this.ButtonSave, "Zapisz dane do pliku");
-            this.ButtonSave.UseVisualStyleBackColor = true;
-            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
-            // 
-            // CheckBoxGenerateFile
-            // 
-            this.CheckBoxGenerateFile.AutoSize = true;
-            this.CheckBoxGenerateFile.Location = new System.Drawing.Point(305, 95);
-            this.CheckBoxGenerateFile.Name = "CheckBoxGenerateFile";
-            this.CheckBoxGenerateFile.Size = new System.Drawing.Size(82, 17);
-            this.CheckBoxGenerateFile.TabIndex = 28;
-            this.CheckBoxGenerateFile.Text = "Generuj plik";
-            this.ToolTipTest.SetToolTip(this.CheckBoxGenerateFile, "Generuj plik z danymi  z robota w formacie lf3");
-            this.CheckBoxGenerateFile.UseVisualStyleBackColor = true;
-            this.CheckBoxGenerateFile.CheckedChanged += new System.EventHandler(this.CheckBoxGenerateFile_CheckedChanged);
-            // 
-            // CheckBoxEnableSensors
-            // 
-            this.CheckBoxEnableSensors.AutoSize = true;
-            this.CheckBoxEnableSensors.Location = new System.Drawing.Point(305, 49);
-            this.CheckBoxEnableSensors.Name = "CheckBoxEnableSensors";
-            this.CheckBoxEnableSensors.Size = new System.Drawing.Size(62, 17);
-            this.CheckBoxEnableSensors.TabIndex = 27;
-            this.CheckBoxEnableSensors.Text = "Czujniki";
-            this.ToolTipTest.SetToolTip(this.CheckBoxEnableSensors, "Włącz/wyłącz czujniki linii w robocie");
-            this.CheckBoxEnableSensors.UseVisualStyleBackColor = true;
-            this.CheckBoxEnableSensors.CheckedChanged += new System.EventHandler(this.CheckBoxEnableSensors_CheckedChanged);
-            // 
-            // ButtonEditWeights
-            // 
-            this.ButtonEditWeights.Location = new System.Drawing.Point(305, 19);
-            this.ButtonEditWeights.Name = "ButtonEditWeights";
-            this.ButtonEditWeights.Size = new System.Drawing.Size(98, 23);
-            this.ButtonEditWeights.TabIndex = 26;
-            this.ButtonEditWeights.Text = "Wagi czujników";
-            this.ToolTipTest.SetToolTip(this.ButtonEditWeights, "Otwiera okienko z wagami czujników");
-            this.ButtonEditWeights.UseVisualStyleBackColor = true;
-            this.ButtonEditWeights.Click += new System.EventHandler(this.ButtonEditWeights_Click);
-            // 
             // PictureBoxBatt
             // 
             this.PictureBoxBatt.Image = global::COM_test.Properties.Resources.batt_full;
@@ -903,6 +904,7 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "RoChN Control";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
@@ -1021,6 +1023,7 @@
         private System.Windows.Forms.CheckBox CheckBoxEnableSensors;
         private System.Windows.Forms.CheckBox CheckBoxGenerateFile;
         private System.Windows.Forms.Button ButtonSave;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }
 

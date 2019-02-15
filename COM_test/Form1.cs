@@ -686,17 +686,23 @@ namespace COM_test
                     {
                         MessageBox.Show("Nie można stworzyć pliku!");
                         CheckBoxGenerateFile.Checked = false;
+                        GenerateOutput = true;
                     }
                 }
                 else
                 {
                     MessageBox.Show("Brak wag czujników!");
                     CheckBoxGenerateFile.Checked = false;
+                    GenerateOutput = true;
                 }
             }
             else
             {
+                DialogResult result = MessageBox.Show("Masz niezapisane dane. Czy chcesz je zapisać?", "Błąd", MessageBoxButtons.YesNo);
+                if (result == DialogResult.OK)
+                    ButtonSave_Click(this, new EventArgs());
                 GenerateOutput = false;
+                DataList = new List<byte>();
             }
         }
 
@@ -728,6 +734,11 @@ namespace COM_test
                     Writer.Dispose();
                 }
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Writer.Dispose();
         }
 
         private void ButtonEditWeights_Click(object sender, EventArgs e)
