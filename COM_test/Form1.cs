@@ -17,18 +17,16 @@ namespace COM_test
         private bool ExternalPower = false;
         public bool Debug = false;
         private bool ManualMode = false;
-        private short[] SensorsWeights = { -1 };
-        private short[] AdditionalSensorsWeights = { -1 };
+        public short[] SensorsWeights = { -1 };
+        public short[] AdditionalSensorsWeights = { -1 };
         private string DataIncomplete = String.Empty;
         private bool IsConnected = false;
         private List<byte> DataList = new List<byte>();
         private bool GenerateOutput = false;
         private System.IO.BinaryWriter Writer;
+        private Settings settings = new Settings(@"../../data/settings.ini");
 
         System.IO.Stream file;
-
-        private float Kd, Kp, Ki;
-
         public event EventHandler<SensorsWeightsRecivedEventArgs> SensorsWeightsRecived;
 
         public Form1()
@@ -38,7 +36,30 @@ namespace COM_test
             string[] ports = SerialPort.GetPortNames();
             foreach (string a in ports)
                 Combo.Items.Add(a);
-            Kd = Kp = Ki = -1;
+            settings.Kd = settings.Kp = settings.Ki = -1;
+            bool ok = true;
+            try
+            {
+                settings.Read();
+            }
+            catch
+            {
+                ok = false;
+            }
+            if(ok)
+            {
+                SetNumericUpDownValue(NumericUpDownKd, Convert.ToDecimal(settings.Kd));
+                SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(settings.Kp));
+                SetNumericUpDownValue(NumericUpDownKi, Convert.ToDecimal(settings.Ki));
+                SetNumericUpDownValue(NumericUpDownPWM, Convert.ToDecimal(settings.pwm));
+                AdditionalSensorsWeights = new short[2];
+                AdditionalSensorsWeights[0] = settings.weights[0];
+                AdditionalSensorsWeights[1] = settings.weights[13];
+                SensorsWeights = new short[12]; 
+                for (int i = 0; i < 12; i++)
+                    SensorsWeights[i] = settings.weights[i+1];
+                Combo.SelectedItem = settings.port;
+            }
         }
 
         private void ButtonConnect_Click(object sender, EventArgs e)
@@ -96,6 +117,7 @@ namespace COM_test
             LabelIsConn.Text = "Brak Połączenia";
             ToolStripLabelPort.Text = "Port: Brak";
             SerialPortBt.PortName = Combo.SelectedItem.ToString();
+            settings.port = Combo.SelectedItem.ToString();
         }
 
         private void SerialPortBtDataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -238,20 +260,20 @@ namespace COM_test
                         break;
                     case 'P':
                         SetText(Environment.NewLine + "Kp:");
-                        Kp = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
-                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(Kp));
+                        settings.Kp = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKp, Convert.ToDecimal(settings.Kp));
                         DataQueue.Dequeue();
                         break;
                     case 'I':
                         SetText(Environment.NewLine + "Ki:");
-                        Ki = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
-                        SetNumericUpDownValue(NumericUpDownKi, Convert.ToDecimal(Ki));
+                        settings.Ki = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKi, Convert.ToDecimal(settings.Ki));
                         DataQueue.Dequeue();
                         break;
                     case 'D':
                         SetText(Environment.NewLine + "Kd:");
-                        Kd = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
-                        SetNumericUpDownValue(NumericUpDownKd, Convert.ToDecimal(Kd));
+                        settings.Kd = Convert.ToSingle(Data, CultureInfo.InvariantCulture);
+                        SetNumericUpDownValue(NumericUpDownKd, Convert.ToDecimal(settings.Kd));
                         DataQueue.Dequeue();
                         break;
                     case 'W':
@@ -671,16 +693,16 @@ namespace COM_test
                     GenerateOutput = true;
                     try
                     {
-                        file = System.IO.File.Create(DateTime.Now.ToString("HH-mm-ss__dd-MM") + ".lf3");
+                        file = System.IO.File.Create(@"../data/" + DateTime.Now.ToString("HH-mm-ss__dd-MM") + ".lf3");
                         Writer = new System.IO.BinaryWriter(file);
                         Writer.Write("lf3");
                         Writer.Write(AdditionalSensorsWeights[0]);
                         for (int i = 0; i < 12; i++)
                             Writer.Write(SensorsWeights[i]);
                         Writer.Write(AdditionalSensorsWeights[1]);
-                        Writer.Write(Kp);
-                        Writer.Write(Kd);
-                        Writer.Write(Ki);
+                        Writer.Write(settings.Kp);
+                        Writer.Write(settings.Kd);
+                        Writer.Write(settings.Ki);
                     }
                     catch
                     {
@@ -736,24 +758,46 @@ namespace COM_test
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Writer.Dispose();
-        }
-
         private void ButtonEditWeights_Click(object sender, EventArgs e)
         {
             FormSensors formSensors = new FormSensors(this);
             formSensors.Show();
             if (SensorsWeights.Length == 12)
                 SensorsWeightsRecived(this, new SensorsWeightsRecivedEventArgs(SensorsWeights));
-            if(AdditionalSensorsWeights.Length == 2)
+            if (AdditionalSensorsWeights.Length == 2)
                 SensorsWeightsRecived(this, new SensorsWeightsRecivedEventArgs(AdditionalSensorsWeights));
         }
 
         protected virtual void OnSensorsWeightsRecived(SensorsWeightsRecivedEventArgs e)
         {
             SensorsWeightsRecived?.Invoke(this, e);
+        }
+
+        private void buttonSaveSettings_Click(object sender, EventArgs e)
+        {
+            settings.Kp = Convert.ToSingle(NumericUpDownKp.Value);
+            settings.Ki = Convert.ToSingle(NumericUpDownKi.Value);
+            settings.Kd = Convert.ToSingle(NumericUpDownKd.Value);
+            settings.pwm = Convert.ToInt16(NumericUpDownPWM.Value);
+            if (AdditionalSensorsWeights.Length == 1)
+            {
+                MessageBox.Show("Niekomplatne dane");
+            }
+            else
+            {
+                settings.weights[0] = AdditionalSensorsWeights[0];
+                settings.weights[13] = AdditionalSensorsWeights[1];
+            }
+            if (SensorsWeights.Length == 1)
+            {
+                MessageBox.Show("Niekomplatne dane");
+            }
+            else
+            {
+                for (int i = 0; i < 12; i++)
+                    settings.weights[i+1] = SensorsWeights[i];
+            }
+            settings.Save();
         }
     }
 
@@ -803,5 +847,52 @@ namespace COM_test
         public short[] Values { get; }
 
         public SensorsWeightsRecivedEventArgs(short[] vs) => Values = vs;
+    }
+
+    public class Settings
+    {
+        public float Kp;
+        public float Kd;
+        public float Ki;
+        public short[] weights = new short[14];
+        public short pwm;
+        public string port;
+        private readonly string path;
+
+        public Settings(string a) => path = a;
+
+        public void Save()
+        {
+            string data = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            try
+            {
+                System.IO.File.WriteAllText(path, data);
+            }
+            catch
+            {
+                MessageBox.Show("Błąd zapisu.");
+            }
+        }
+
+        public void Read()
+        {
+            string data;
+            try
+            {
+                data = System.IO.File.ReadAllText(path);
+                Settings s = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(data);
+                this.Kp = s.Kp;
+                this.Kd = s.Kd;
+                this.Ki = s.Ki;
+                this.weights = s.weights;
+                this.pwm = s.pwm;
+                this.port = s.port;
+            }
+            catch
+            {
+                MessageBox.Show("Błąd wczytywania danych");
+                throw;
+            }
+        }
     }
 }

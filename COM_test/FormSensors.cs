@@ -26,7 +26,7 @@ namespace COM_test
                 {
                     if (num is NumericUpDown)
                     {
-                        if(num.Name[13] != 'A')
+                        if (num.Name[13] != 'A')
                         {
                             SetNumericUpDownValue((num as NumericUpDown), e.Values[Int16.Parse(num.Name.Substring(25)) - 1]);
                         }
@@ -57,6 +57,27 @@ namespace COM_test
         private void FormSensors_Load(object sender, EventArgs e)
         {
             MainForm.SensorsWeightsRecived += HandleSensorsWeightsRecived;
+        }
+
+        private void ButtonOK_Click(object sender, EventArgs e)
+        {
+            foreach (Control num in GroupBoxSensorsWeights.Controls)
+            {
+                if (num is NumericUpDown)
+                {
+                    if (num.Name[13] != 'A')
+                    {
+                        MainForm.SensorsWeights[Int16.Parse(num.Name.Substring(25)) - 1] = Convert.ToInt16((num as NumericUpDown).Value);
+                    }
+                    else
+                    {
+                        if (num.Name[20] == '1')
+                            MainForm.AdditionalSensorsWeights[0] = Convert.ToInt16((num as NumericUpDown).Value);
+                        if (num.Name[20] == '2')
+                            MainForm.AdditionalSensorsWeights[1] = Convert.ToInt16((num as NumericUpDown).Value);
+                    }
+                }
+            }
         }
     }
 }

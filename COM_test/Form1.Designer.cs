@@ -59,6 +59,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.NumericUpDownBattDelay = new System.Windows.Forms.NumericUpDown();
             this.LabelOptionsBattDelay = new System.Windows.Forms.Label();
+            this.TabSettings = new System.Windows.Forms.TabPage();
+            this.buttonSaveSettings = new System.Windows.Forms.Button();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
             this.TimerBenchmark = new System.Windows.Forms.Timer(this.components);
             this.ButtonOfDoom = new System.Windows.Forms.Button();
@@ -110,6 +112,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownBaudRate)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownBattDelay)).BeginInit();
+            this.TabSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxLogo)).BeginInit();
             this.StatusStripBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownKp)).BeginInit();
@@ -335,6 +338,7 @@
             // 
             this.TabControlMenu.Controls.Add(this.TabDataRaw);
             this.TabControlMenu.Controls.Add(this.TabOptions);
+            this.TabControlMenu.Controls.Add(this.TabSettings);
             this.TabControlMenu.Location = new System.Drawing.Point(15, 65);
             this.TabControlMenu.Name = "TabControlMenu";
             this.TabControlMenu.SelectedIndex = 0;
@@ -475,6 +479,26 @@
             this.LabelOptionsBattDelay.Size = new System.Drawing.Size(174, 13);
             this.LabelOptionsBattDelay.TabIndex = 1;
             this.LabelOptionsBattDelay.Text = "Odstęp sprawdzania stanu baterii(s)";
+            // 
+            // TabSettings
+            // 
+            this.TabSettings.Controls.Add(this.buttonSaveSettings);
+            this.TabSettings.Location = new System.Drawing.Point(4, 22);
+            this.TabSettings.Name = "TabSettings";
+            this.TabSettings.Size = new System.Drawing.Size(272, 258);
+            this.TabSettings.TabIndex = 3;
+            this.TabSettings.Text = "Ustawienia";
+            this.TabSettings.UseVisualStyleBackColor = true;
+            // 
+            // buttonSaveSettings
+            // 
+            this.buttonSaveSettings.Location = new System.Drawing.Point(8, 22);
+            this.buttonSaveSettings.Name = "buttonSaveSettings";
+            this.buttonSaveSettings.Size = new System.Drawing.Size(106, 23);
+            this.buttonSaveSettings.TabIndex = 0;
+            this.buttonSaveSettings.Text = "Zapisz ustawienia";
+            this.buttonSaveSettings.UseVisualStyleBackColor = true;
+            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
             // 
             // Timer1
             // 
@@ -904,7 +928,6 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "RoChN Control";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
@@ -921,6 +944,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownBattDelay)).EndInit();
+            this.TabSettings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxLogo)).EndInit();
             this.StatusStripBottom.ResumeLayout(false);
             this.StatusStripBottom.PerformLayout();
@@ -1024,6 +1048,8 @@
         private System.Windows.Forms.CheckBox CheckBoxGenerateFile;
         private System.Windows.Forms.Button ButtonSave;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.TabPage TabSettings;
+        private System.Windows.Forms.Button buttonSaveSettings;
     }
 }
 
