@@ -600,14 +600,14 @@
             // ToolStripStatusLabelEmpty
             // 
             this.ToolStripStatusLabelEmpty.Name = "ToolStripStatusLabelEmpty";
-            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(285, 17);
+            this.ToolStripStatusLabelEmpty.Size = new System.Drawing.Size(289, 17);
             this.ToolStripStatusLabelEmpty.Spring = true;
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(146, 17);
-            this.toolStripStatusLabel1.Text = "Wersja 1.3 Warszawa 2019)";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(142, 17);
+            this.toolStripStatusLabel1.Text = "Wersja 1.4 Warszawa 2019";
             // 
             // splitter1
             // 
